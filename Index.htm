@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payroll Bank Comparator — Three D Integrated Solutions</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<style>
+  :root {
+    --blue: #1F497D;
+    --blue-light: #E8EEF6;
+    --blue-mid: #2E6BAD;
+    --green: #D5F5E3;
+    --green-text: #1A7A45;
+    --red: #FF6B6B;
+    --red-light: #FDEAEA;
+    --orange: #FFB347;
+    --orange-light: #FFF3E0;
+    --yellow: #FFF176;
+    --yellow-light: #FFFDE7;
+    --purple: #D7BDE2;
+    --purple-light: #F5EEF8;
+    --blue-row: #AED6F1;
+    --blue-row-light: #EBF5FB;
+    --border: #DDE3ED;
+    --text: #1C2B3A;
+    --text-muted: #5A6878;
+    --surface: #F4F7FB;
+    --white: #FFFFFF;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(31,73,125,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--blue);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 60px;
+  }
+
+  header .logo {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  header .logo svg { width: 20px; height: 20px; fill: white; }
+
+  header h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.01em;
+  }
+
+  header span {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    margin-left: 4px;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::before {
+    content: '';
+    width: 3px; height: 16px;
+    background: var(--blue-mid);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  input[type="text"] {
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 12px;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    background: var(--white);
+  }
+
+  input[type="text"]:focus { border-color: var(--blue-mid); }
+
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--surface);
+    position: relative;
+  }
+
+  .drop-zone:hover, .drop-zone.over {
+    border-color: var(--blue-mid);
+    background: var(--blue-light);
+  }
+
+  .drop-zone input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+
+  .drop-zone .icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .drop-zone p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .drop-zone strong {
+    color: var(--blue-mid);
+  }
+
+  .file-list {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .file-chip {
+    background: var(--blue-light);
+    border: 1px solid #C5D4E8;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .file-chip .remove {
+    cursor: pointer;
+    color: #8B9DB0;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .file-chip .remove:hover { color: var(--red); }
+
+  .files-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .file-box {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+  }
+
+  .file-box-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 8px;
+  }
+
+  .run-btn {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .run-btn:hover { background: var(--blue-mid); }
+  .run-btn:active { transform: scale(0.98); }
+  .run-btn:disabled { background: #A0AEC0; cursor: not-allowed; transform: none; }
+
+  .run-btn svg { width: 16px; height: 16px; fill: none; stroke: white; stroke-width: 2; }
+
+  #progress-area {
+    display: none;
+  }
+
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 100px;
+    height: 6px;
+    margin: 12px 0 8px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--blue-mid);
+    border-radius: 100px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  #results-area { display: none; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--blue);
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 4px;
+  }
+
+  .stat-card.good .stat-num { color: var(--green-text); }
+  .stat-card.warn .stat-num { color: #C0710A; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .swatch {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 1rem;
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+
+  .tab:hover { color: var(--blue); }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  .tab-badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 1px 6px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  th {
+    background: var(--blue);
+    color: white;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    position: sticky;
+    top: 0;
+  }
+
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .row-green td { background: var(--green); }
+  .row-red td { background: var(--red-light); }
+  .row-orange td { background: var(--orange-light); }
+  .row-yellow td { background: var(--yellow-light); }
+  .row-purple td { background: var(--purple-light); }
+  .row-blue td { background: var(--blue-row-light); }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-green { background: var(--green); color: var(--green-text); }
+  .badge-red { background: var(--red-light); color: #9B1C1C; }
+  .badge-orange { background: var(--orange-light); color: #7D4A00; }
+  .badge-yellow { background: var(--yellow-light); color: #7B6200; }
+  .badge-purple { background: var(--purple-light); color: #5B2D8A; }
+  .badge-blue { background: var(--blue-row-light); color: #1A4E7A; }
+
+  .download-btn {
+    background: var(--green-text);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.15s;
+  }
+
+  .download-btn:hover { opacity: 0.88; }
+
+  .empty-msg {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .all-clear {
+    background: var(--green);
+    border: 1px solid #A9DFBF;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--green-text);
+    margin-bottom: 1rem;
+  }
+
+  .error-msg {
+    background: var(--red-light);
+    border: 1px solid #F5C6CB;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #9B1C1C;
+    margin-top: 1rem;
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .field-row, .files-grid, .summary-grid { grid-template-columns: 1fr; }
+    .container { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </div>
+  <h1>Payroll Bank Comparator <span>— Three D Integrated Solutions</span></h1>
+</header>
+
+<div class="container">
+
+  <!-- Step 1: Setup -->
+  <div class="card">
+    <div class="card-title">Step 1 — Payroll details</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Payroll run name</label>
+        <input type="text" id="payroll-name" placeholder="e.g. June 2026 BHS T3" />
+      </div>
+      <div class="field">
+        <label>Excel password (if protected)</label>
+        <input type="text" id="excel-password" placeholder="Leave blank if not protected" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Files -->
+  <div class="card">
+    <div class="card-title">Step 2 — Upload files</div>
+
+    <div class="files-grid">
+      <div class="file-box">
+        <div class="file-box-label">📊 Bank advice Excel (.xlsx / .xls)</div>
+        <div class="drop-zone" id="drop-excel">
+          <input type="file" id="file-excel" accept=".xlsx,.xls" />
+          <div class="icon">📁</div>
+          <p>Drop file here or <strong>click to browse</strong></p>
+        </div>
+        <div class="file-list" id="excel-chips"></div>
+      </div>
+
+      <div class="file-box">
+        <div class="file-box-label">📄 Bank upload text files (2–4 files)</div>
+        <div class="drop-zone" id="drop-txt">
+          <input type="file" id="file-txt" multiple />
+          <div class="icon">📁</div>
+          <p>Drop files here or <strong>click to browse</strong></p>
+          <p style="font-size:11px; margin-top:4px; color:#8B9DB0">HDFC (.20/.21) and NEFT (.clt) files</p>
+        </div>
+        <div class="file-list" id="txt-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Run -->
+  <div class="card">
+    <div class="card-title">Step 3 — Run comparison</div>
+    <button class="run-btn" id="run-btn" onclick="runComparison()">
+      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Run comparison
+    </button>
+    <div id="error-msg" class="error-msg"></div>
+
+    <div id="progress-area" style="margin-top:1rem;">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+      <div class="progress-label" id="prog-label">Reading files…</div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="results-area">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+        <div class="card-title" style="margin-bottom:0">Results — <span id="result-name" style="font-weight:400; color:#5A6878;"></span></div>
+        <button class="download-btn" onclick="downloadReport()">
+          ⬇ Download Excel report
+        </button>
+      </div>
+
+      <div class="summary-grid">
+        <div class="stat-card">
+          <div class="stat-num" id="s-total">—</div>
+          <div class="stat-label">Total records</div>
+        </div>
+        <div class="stat-card good">
+          <div class="stat-num" id="s-match">—</div>
+          <div class="stat-label">Matched ✅</div>
+        </div>
+        <div class="stat-card warn">
+          <div class="stat-num" id="s-disc">—</div>
+          <div class="stat-label">Discrepancies ⚠</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="s-sections">4</div>
+          <div class="stat-label">Sections</div>
+        </div>
+      </div>
+
+      <div id="all-clear-banner" class="all-clear" style="display:none;">
+        ✅ All records matched — no discrepancies found.
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="swatch" style="background:#D5F5E3"></div> Match</div>
+        <div class="legend-item"><div class="swatch" style="background:#FDEAEA"></div> Amount mismatch</div>
+        <div class="legend-item"><div class="swatch" style="background:#FFF3E0"></div> Missing in bank file</div>
+        <div class="legend-item"><div class="swatch" style="background:#EBF5FB"></div> Missing in Excel</div>
+        <div class="legend-item"><div class="swatch" style="background:#FFFDE7"></div> Name mismatch</div>
+        <div class="legend-item"><div class="swatch" style="background:#F5EEF8"></div> IFSC mismatch</div>
+      </div>
+
+      <div class="tab-bar" id="tab-bar"></div>
+      <div class="table-wrap">
+        <table id="results-table">
+          <thead id="results-thead"></thead>
+          <tbody id="results-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let excelFile = null;
+let txtFiles = [];
+let allResults = {};
+let currentTab = 'disc';
+
+// ── File handling ──────────────────────────────────────────────────────────
+document.getElementById('file-excel').addEventListener('change', function(e) {
+  if (e.target.files[0]) setExcelFile(e.target.files[0]);
+});
+
+document.getElementById('file-txt').addEventListener('change', function(e) {
+  addTxtFiles(Array.from(e.target.files));
+});
+
+['drop-excel','drop-txt'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('over'));
+  el.addEventListener('drop', e => {
+    e.preventDefault(); el.classList.remove('over');
+    const files = Array.from(e.dataTransfer.files);
+    if (id === 'drop-excel') { if (files[0]) setExcelFile(files[0]); }
+    else addTxtFiles(files);
+  });
+});
+
+function setExcelFile(f) {
+  excelFile = f;
+  const chips = document.getElementById('excel-chips');
+  chips.innerHTML = '';
+  chips.appendChild(makeChip(f.name, () => { excelFile = null; chips.innerHTML = ''; }));
+}
+
+function addTxtFiles(files) {
+  files.forEach(f => {
+    if (!txtFiles.find(x => x.name === f.name)) txtFiles.push(f);
+  });
+  renderTxtChips();
+}
+
+function removeTxtFile(name) {
+  txtFiles = txtFiles.filter(f => f.name !== name);
+  renderTxtChips();
+}
+
+function renderTxtChips() {
+  const chips = document.getElementById('txt-chips');
+  chips.innerHTML = '';
+  txtFiles.forEach(f => chips.appendChild(makeChip(f.name, () => removeTxtFile(f.name))));
+}
+
+function makeChip(name, onRemove) {
+  const d = document.createElement('div');
+  d.className = 'file-chip';
+  d.innerHTML = `<span>${name}</span><span class="remove" title="Remove">×</span>`;
+  d.querySelector('.remove').onclick = onRemove;
+  return d;
+}
+
+// ── Parsers ───────────────────────────────────────────────────────────────
+function clean(s) { return String(s || '').trim().toUpperCase().replace(/\s+/g, ' '); }
+
+function nameSimilar(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  if (a.includes(b) || b.includes(a)) return true;
+  const wa = new Set(a.split(' ')), wb = new Set(b.split(' '));
+  const inter = [...wa].filter(x => wb.has(x));
+  if (inter.length / Math.max(wa.size, wb.size) >= 0.6) return true;
+  const shorter = a.length <= b.length ? a : b;
+  const longer  = a.length <= b.length ? b : a;
+  const matches = [...shorter].filter(c => longer.includes(c)).length;
+  return matches / longer.length >= 0.82;
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.onerror = reject;
+    r.readAsText(file, 'latin1');
+  });
+}
+
+function readFileAsArrayBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.onerror = reject;
+    r.readAsArrayBuffer(file);
+  });
+}
+
+function detectFileType(text) {
+  for (const line of text.split('\n')) {
+    const t = line.trim();
+    if (!t || t.toLowerCase().startsWith('account')) continue;
+    return t.split(',').length <= 5 ? 'HDFC' : 'NEFT';
+  }
+  return 'NEFT';
+}
+
+function parseHDFC(text) {
+  const records = [];
+  for (const line of text.split('\n')) {
+    const t = line.trim();
+    if (!t || t.toLowerCase().startsWith('account')) continue;
+    const parts = t.split(',');
+    if (parts.length < 4) continue;
+    const account = parts[0].trim();
+    const amtStr = parts[2].trim();
+    const narration = parts.slice(3).join(',').trim().toUpperCase();
+    const amount = Math.round(parseFloat(amtStr));
+    if (isNaN(amount)) continue;
+    records.push({ account, amount, name: narration });
+  }
+  return records;
+}
+
+function parseNEFT(text) {
+  const records = [];
+  for (const line of text.split('\n')) {
+    const t = line.trim();
+    if (!t) continue;
+    const parts = t.split(',');
+    if (parts.length < 6) continue;
+    const amount = parseInt(parts[5].trim());
+    if (isNaN(amount)) continue;
+    records.push({
+      emp_code: parts[0].trim().toUpperCase(),
+      name: parts[1].trim().toUpperCase(),
+      account: parts[2].trim(),
+      ifsc: parts[3].trim().toUpperCase(),
+      amount
+    });
+  }
+  return records;
+}
+
+function parseExcelSection(rows, bankType) {
+  const skip = new Set(['SLNO','BANK TOTAL','NEFT TOTAL','TOTAL','GRAND TOTAL','ON SAL REG','DIFFERENCE','HOLD','CHEQUE','NEFT','OT']);
+  const sections = [];
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const vals = r.map(v => String(v||'').trim().toUpperCase());
+    const valsNS = vals.map(v => v.replace(/\s+/g,''));
+    if (vals.includes('SLNO') && vals.includes('EMP_CODE') && (valsNS.includes('BANKACNO') || valsNS.includes('BANKACCNO'))) {
+      let end = rows.length;
+      let ifscCol = null, nibCol = null;
+      vals.forEach((v,idx) => {
+        const vns = v.replace(/\s+/g,'');
+        if (vns === 'IFSCCODE' || vns === 'IFSC') ifscCol = idx;
+        if (vns === 'NAMEINBANK' || vns === 'BANKNAME') nibCol = idx;
+      });
+      ifscCol = ifscCol ?? 7; nibCol = nibCol ?? 8;
+      for (let j = i+1; j < rows.length; j++) {
+        const rv = rows[j].map(v => String(v||'').trim().toUpperCase());
+        if (['BANK TOTAL','NEFT TOTAL','TOTAL'].some(t => rv.includes(t) || rv[0] === t)) { end = j; break; }
+        if (rv.includes('SLNO') && rv.includes('EMP_CODE')) { end = j; break; }
+      }
+      sections.push({ start: i+1, end, ifscCol, nibCol });
+    }
+  }
+  const records = [];
+  for (const { start, end, ifscCol, nibCol } of sections) {
+    for (let i = start; i < end; i++) {
+      const row = rows[i];
+      if (!row[0] && !row[1]) continue;
+      const first = String(row[0]||'').trim().toUpperCase();
+      if (skip.has(first)) continue;
+      if (!row[1]) continue;
+      const bank = String(row[3]||'').trim().toUpperCase();
+      if (bankType === 'HDFC' && !bank.includes('HDFC')) continue;
+      if (bankType === 'OTHER' && !bank.includes('OTHER') && !bank.includes('NEFT')) continue;
+      let pay;
+      try { pay = parseInt(parseFloat(String(row[5]))); } catch(e) { continue; }
+      if (!pay || pay <= 0) continue;
+      const acc = String(row[4]||'').trim();
+      if (!acc) continue;
+      records.push({
+        emp_code: String(row[1]||'').trim().toUpperCase(),
+        name: String(row[2]||'').trim().toUpperCase(),
+        account: acc,
+        ifsc: String(row[ifscCol]||'').trim().toUpperCase(),
+        amount: pay,
+        name_in_bank: String(row[nibCol]||'').trim().toUpperCase()
+      });
+    }
+  }
+  return records;
+}
+
+function compareAll(excelList, txtList, category) {
+  const excelMap = Object.fromEntries(excelList.map(r => [r.account, r]));
+  const txtMap   = Object.fromEntries(txtList.map(r => [r.account, r]));
+  const rows = [];
+  const seen = new Set();
+  const orderedAccs = excelList.map(r => r.account);
+  txtList.forEach(r => { if (!excelMap[r.account]) orderedAccs.push(r.account); });
+
+  for (const acc of orderedAccs) {
+    if (seen.has(acc)) continue; seen.add(acc);
+    const e = excelMap[acc], t = txtMap[acc];
+    if (e && !t) {
+      rows.push({ category, account: acc, status: 'Missing in bank file',
+        excel_name: e.name, excel_amt: e.amount, excel_ifsc: e.ifsc||'',
+        txt_name: '—', txt_amt: '—', txt_ifsc: '—', color: 'ORANGE' });
+    } else if (t && !e) {
+      rows.push({ category, account: acc, status: 'Missing in Excel',
+        excel_name: '—', excel_amt: '—', excel_ifsc: '—',
+        txt_name: t.name, txt_amt: t.amount, txt_ifsc: t.ifsc||'', color: 'BLUE' });
+    } else {
+      const issues = []; let color = 'GREEN';
+      if (e.amount !== t.amount) {
+        issues.push(`Amount: Excel ${e.amount} ≠ Bank ${t.amount}`);
+        color = 'RED';
+      }
+      const en = clean(e.name), nib = clean(e.name_in_bank||''), tn = clean(t.name);
+      if (!nameSimilar(en, tn) && !nameSimilar(nib, tn)) {
+        issues.push(`Name: ${e.name} ≠ ${t.name}`);
+        if (color === 'GREEN') color = 'YELLOW';
+      }
+      const ei = (e.ifsc||'').toUpperCase(), ti = (t.ifsc||'').toUpperCase();
+      if (ei && ti && ei !== ti) {
+        issues.push(`IFSC: ${ei} ≠ ${ti}`);
+        if (color === 'GREEN') color = 'PURPLE';
+      }
+      rows.push({ category, account: acc,
+        status: issues.length ? issues.join(' | ') : '✅ Match',
+        excel_name: e.name, excel_amt: e.amount, excel_ifsc: e.ifsc||'',
+        txt_name: t.name, txt_amt: t.amount, txt_ifsc: t.ifsc||'', color });
+    }
+  }
+  return rows;
+}
+
+function accsOf(list) { return new Set(list.map(r => r.account)); }
+
+function classifyFiles(hdfcFiles, xlSalHdfc, xlOtHdfc, neftFiles, xlSalNeft, xlOtNeft) {
+  let hdfcSal = [], hdfcOt = [], neftSal = [], neftOt = [];
+  const salH = accsOf(xlSalHdfc), otH = accsOf(xlOtHdfc);
+  const salN = accsOf(xlSalNeft), otN = accsOf(xlOtNeft);
+
+  if (hdfcFiles.length === 2) {
+    const [r0, r1] = hdfcFiles.map(f => accsOf(f.records));
+    const sA = [...r0].filter(a => salH.has(a)).length + [...r1].filter(a => otH.has(a)).length;
+    const sB = [...r0].filter(a => otH.has(a)).length  + [...r1].filter(a => salH.has(a)).length;
+    if (sA >= sB) { hdfcSal = hdfcFiles[0].records; hdfcOt = hdfcFiles[1].records; }
+    else          { hdfcOt  = hdfcFiles[0].records; hdfcSal = hdfcFiles[1].records; }
+  } else if (hdfcFiles.length === 1) {
+    const accs = accsOf(hdfcFiles[0].records);
+    const sh = [...accs].filter(a => salH.has(a)).length;
+    const oh = [...accs].filter(a => otH.has(a)).length;
+    if (sh >= oh) hdfcSal = hdfcFiles[0].records; else hdfcOt = hdfcFiles[0].records;
+  }
+
+  if (neftFiles.length === 2) {
+    const [r0, r1] = neftFiles.map(f => accsOf(f.records));
+    const sA = [...r0].filter(a => salN.has(a)).length + [...r1].filter(a => otN.has(a)).length;
+    const sB = [...r0].filter(a => otN.has(a)).length  + [...r1].filter(a => salN.has(a)).length;
+    if (sA >= sB) { neftSal = neftFiles[0].records; neftOt = neftFiles[1].records; }
+    else          { neftOt  = neftFiles[0].records; neftSal = neftFiles[1].records; }
+  } else if (neftFiles.length === 1) {
+    const accs = accsOf(neftFiles[0].records);
+    const sh = [...accs].filter(a => salN.has(a)).length;
+    const oh = [...accs].filter(a => otN.has(a)).length;
+    if (sh >= oh) neftSal = neftFiles[0].records; else neftOt = neftFiles[0].records;
+  }
+
+  return { hdfcSal, hdfcOt, neftSal, neftOt };
+}
+
+// ── Main run ──────────────────────────────────────────────────────────────
+function setProgress(pct, label) {
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = label;
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+async function runComparison() {
+  const name = document.getElementById('payroll-name').value.trim();
+  document.getElementById('error-msg').style.display = 'none';
+
+  if (!name) return showError('Please enter a payroll run name.');
+  if (!excelFile) return showError('Please upload the bank advice Excel file.');
+  if (txtFiles.length < 2) return showError('Please upload at least 2 bank upload text files.');
+
+  document.getElementById('run-btn').disabled = true;
+  document.getElementById('progress-area').style.display = 'block';
+  document.getElementById('results-area').style.display = 'none';
+
+  try {
+    setProgress(10, 'Reading Excel bank advice…');
+    const excelBuf = await readFileAsArrayBuffer(excelFile);
+    const wb = XLSX.read(excelBuf, { type: 'array' });
+
+    let salSheet = null, otSheet = null;
+    for (const sname of wb.SheetNames) {
+      const u = sname.toUpperCase();
+      if ((u.includes('SAL') || u.includes('SALARY') || u.includes('BANK TRANSFER')) && !salSheet) salSheet = wb.Sheets[sname];
+      if (u.includes('OT') && !u.includes('SAL') && !otSheet) otSheet = wb.Sheets[sname];
+    }
+    if (!salSheet && !otSheet) {
+      salSheet = wb.Sheets[wb.SheetNames[0]];
+      otSheet  = wb.Sheets[wb.SheetNames[1]] || salSheet;
+    }
+    salSheet = salSheet || otSheet;
+    otSheet  = otSheet  || salSheet;
+
+    const toRows = sheet => XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
+    const salRows = toRows(salSheet);
+    const otRows  = toRows(otSheet);
+
+    setProgress(25, 'Parsing Excel sections…');
+    const xlSalHdfc = parseExcelSection(salRows, 'HDFC');
+    const xlSalNeft = parseExcelSection(salRows, 'OTHER');
+    const xlOtHdfc  = parseExcelSection(otRows,  'HDFC');
+    const xlOtNeft  = parseExcelSection(otRows,  'OTHER');
+
+    setProgress(40, 'Reading bank upload files…');
+    const hdfcFiles = [], neftFiles = [];
+    for (const f of txtFiles) {
+      const text = await readFileAsText(f);
+      const type = detectFileType(text);
+      if (type === 'HDFC') hdfcFiles.push({ name: f.name, records: parseHDFC(text) });
+      else                  neftFiles.push({ name: f.name, records: parseNEFT(text) });
+    }
+
+    setProgress(60, 'Classifying files…');
+    const { hdfcSal, hdfcOt, neftSal, neftOt } = classifyFiles(
+      hdfcFiles, xlSalHdfc, xlOtHdfc, neftFiles, xlSalNeft, xlOtNeft
+    );
+
+    setProgress(75, 'Comparing records…');
+    allResults = {
+      'disc': [],
+      'SAL-HDFC':       compareAll(xlSalHdfc, hdfcSal, 'SALARY — HDFC'),
+      'SAL-OtherBanks': compareAll(xlSalNeft, neftSal, 'SALARY — Other Banks'),
+      'OT-HDFC':        compareAll(xlOtHdfc,  hdfcOt,  'OT — HDFC'),
+      'OT-OtherBanks':  compareAll(xlOtNeft,  neftOt,  'OT — Other Banks'),
+    };
+    allResults['disc'] = Object.values(allResults).flat().filter(r => r && r.color && r.color !== 'GREEN');
+
+    setProgress(90, 'Building report…');
+    const total   = Object.entries(allResults).filter(([k]) => k !== 'disc').reduce((s,[,v]) => s + v.length, 0);
+    const matched = Object.entries(allResults).filter(([k]) => k !== 'disc').reduce((s,[,v]) => s + v.filter(r => r.color === 'GREEN').length, 0);
+    const disc    = allResults['disc'].length;
+
+    document.getElementById('result-name').textContent = name;
+    document.getElementById('s-total').textContent = total;
+    document.getElementById('s-match').textContent = matched;
+    document.getElementById('s-disc').textContent  = disc;
+    document.getElementById('all-clear-banner').style.display = disc === 0 ? 'flex' : 'none';
+
+    buildTabs(allResults);
+    showTab('disc');
+
+    setProgress(100, 'Done!');
+    document.getElementById('results-area').style.display = 'block';
+    document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
+
+  } catch(err) {
+    showError('Error: ' + err.message);
+    console.error(err);
+  }
+
+  document.getElementById('run-btn').disabled = false;
+  setTimeout(() => { document.getElementById('progress-area').style.display = 'none'; }, 1200);
+}
+
+// ── UI ────────────────────────────────────────────────────────────────────
+const TAB_LABELS = {
+  'disc': '⚠ Discrepancies',
+  'SAL-HDFC': 'SAL — HDFC',
+  'SAL-OtherBanks': 'SAL — Other Banks',
+  'OT-HDFC': 'OT — HDFC',
+  'OT-OtherBanks': 'OT — Other Banks',
+};
+
+function buildTabs(results) {
+  const bar = document.getElementById('tab-bar');
+  bar.innerHTML = '';
+  for (const [key, label] of Object.entries(TAB_LABELS)) {
+    const rows = results[key] || [];
+    const discCount = key === 'disc' ? rows.length : rows.filter(r => r.color !== 'GREEN').length;
+    const el = document.createElement('div');
+    el.className = 'tab' + (key === currentTab ? ' active' : '');
+    el.dataset.tab = key;
+    el.innerHTML = label + (discCount > 0 ? `<span class="tab-badge">${discCount}</span>` : '');
+    el.onclick = () => showTab(key);
+    bar.appendChild(el);
+  }
+}
+
+function showTab(key) {
+  currentTab = key;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === key));
+  const rows = allResults[key] || [];
+  renderTable(rows);
+}
+
+const COLOR_CLS = { GREEN:'row-green', RED:'row-red', ORANGE:'row-orange', YELLOW:'row-yellow', PURPLE:'row-purple', BLUE:'row-blue' };
+const BADGE_CLS = { GREEN:'badge-green', RED:'badge-red', ORANGE:'badge-orange', YELLOW:'badge-yellow', PURPLE:'badge-purple', BLUE:'badge-blue' };
+
+function renderTable(rows) {
+  const thead = document.getElementById('results-thead');
+  const tbody = document.getElementById('results-tbody');
+  thead.innerHTML = `<tr>
+    <th>#</th><th>Account No.</th><th>Status</th>
+    <th>Excel Name</th><th>Excel Amt</th><th>Excel IFSC</th>
+    <th>Bank Name</th><th>Bank Amt</th><th>Bank IFSC</th>
+  </tr>`;
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-msg">No records in this section.</div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map((r, i) => `
+    <tr class="${COLOR_CLS[r.color] || ''}">
+      <td>${i+1}</td>
+      <td><code style="font-size:11px">${r.account}</code></td>
+      <td><span class="badge ${BADGE_CLS[r.color]}">${r.color}</span> ${r.color === 'GREEN' ? '' : escHtml(r.status)}</td>
+      <td>${escHtml(r.excel_name)}</td>
+      <td>${r.excel_amt}</td>
+      <td style="font-size:11px">${r.excel_ifsc}</td>
+      <td>${escHtml(r.txt_name)}</td>
+      <td>${r.txt_amt}</td>
+      <td style="font-size:11px">${r.txt_ifsc}</td>
+    </tr>`).join('');
+}
+
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Excel download ────────────────────────────────────────────────────────
+function downloadReport() {
+  const name = document.getElementById('payroll-name').value.trim() || 'Payroll';
+  const COLS = ['#','Account No.','Status','Excel Name','Excel Amount','Excel IFSC','Bank Name','Bank Amount','Bank IFSC'];
+  const WIDTHS = [5, 22, 55, 28, 14, 16, 28, 14, 16];
+  const COL_FILLS = {
+    GREEN:'D5F5E3', RED:'FDEAEA', ORANGE:'FFF3E0',
+    YELLOW:'FFFDE7', PURPLE:'F5EEF8', BLUE:'EBF5FB'
+  };
+
+  const newWb = XLSX.utils.book_new();
+
+  function makeSheet(rows, title) {
+    const data = [[title],[],
+      [`Total: ${rows.length}    Matched: ${rows.filter(r=>r.color==='GREEN').length}    Discrepancies: ${rows.filter(r=>r.color!=='GREEN').length}`],
+      [],
+      COLS,
+      ...rows.map((r,i) => [i+1, r.account, r.status, r.excel_name, r.excel_amt, r.excel_ifsc, r.txt_name, r.txt_amt, r.txt_ifsc])
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    ws['!cols'] = WIDTHS.map(w => ({ wch: w }));
+
+    // Style header row (row 5 = index 4)
+    COLS.forEach((_, ci) => {
+      const cellRef = XLSX.utils.encode_cell({ r: 4, c: ci });
+      if (!ws[cellRef]) ws[cellRef] = { v: COLS[ci], t: 's' };
+      ws[cellRef].s = { fill: { fgColor: { rgb: '1F497D' } }, font: { color: { rgb: 'FFFFFF' }, bold: true } };
+    });
+
+    // Style data rows
+    rows.forEach((row, ri) => {
+      const fill = COL_FILLS[row.color] || 'FFFFFF';
+      COLS.forEach((_, ci) => {
+        const cellRef = XLSX.utils.encode_cell({ r: ri + 5, c: ci });
+        if (ws[cellRef]) ws[cellRef].s = { fill: { fgColor: { rgb: fill } } };
+      });
+    });
+
+    return ws;
+  }
+
+  const sections = [
+    ['disc',          'Discrepancies Only'],
+    ['SAL-HDFC',      'SAL-HDFC'],
+    ['SAL-OtherBanks','SAL-OtherBanks'],
+    ['OT-HDFC',       'OT-HDFC'],
+    ['OT-OtherBanks', 'OT-OtherBanks'],
+  ];
+
+  sections.forEach(([key, sheetName]) => {
+    const ws = makeSheet(allResults[key] || [], sheetName);
+    XLSX.utils.book_append_sheet(newWb, ws, sheetName);
+  });
+
+  const buf = XLSX.write(newWb, { type: 'array', bookType: 'xlsx', cellStyles: true });
+  saveAs(new Blob([buf], { type: 'application/octet-stream' }), `${name}_Comparison_Report.xlsx`);
+}
+</script>
+</body>
+</html>
