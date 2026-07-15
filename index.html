@@ -3,620 +3,692 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payroll Bank Comparator — Three D Integrated Solutions</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<title>Payroll Bank Comparator — Static Design Prototype</title>
 <style>
-  :root {
-    --blue: #1F497D;
-    --blue-light: #E8EEF6;
-    --blue-mid: #2E6BAD;
-    --green: #D5F5E3;
-    --green-text: #1A7A45;
-    --red: #FF6B6B;
-    --red-light: #FDEAEA;
-    --orange: #FFB347;
-    --orange-light: #FFF3E0;
-    --yellow: #FFF176;
-    --yellow-light: #FFFDE7;
-    --purple: #D7BDE2;
-    --purple-light: #F5EEF8;
-    --blue-row: #AED6F1;
-    --blue-row-light: #EBF5FB;
-    --border: #DDE3ED;
-    --text: #1C2B3A;
-    --text-muted: #5A6878;
-    --surface: #F4F7FB;
-    --white: #FFFFFF;
-    --radius: 10px;
-    --shadow: 0 2px 12px rgba(31,73,125,0.08);
-  }
+/* =========================================================
+   Payroll Bank Comparator — Static Design Prototype
+   Visual design only. No business logic, no calculations.
+========================================================= */
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ---------- Design tokens ---------- */
+:root {
+  --blue: #1F497D;
+  --blue-light: #E8EEF6;
+  --blue-mid: #2E6BAD;
+  --green: #D5F5E3;
+  --green-text: #1A7A45;
+  --red: #FF6B6B;
+  --red-light: #FDEAEA;
+  --orange: #FFB347;
+  --orange-light: #FFF3E0;
+  --yellow: #FFF176;
+  --yellow-light: #FFFDE7;
+  --purple: #D7BDE2;
+  --purple-light: #F5EEF8;
+  --blue-row: #AED6F1;
+  --blue-row-light: #EBF5FB;
+  --border: #DDE3ED;
+  --text: #1C2B3A;
+  --text-muted: #5A6878;
+  --surface: #F4F7FB;
+  --white: #FFFFFF;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(31, 73, 125, 0.08);
+}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--surface);
-    color: var(--text);
-    min-height: 100vh;
-  }
+/* ---------- Reset ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  header {
-    background: var(--blue);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    height: 60px;
-  }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--surface);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-  header .logo {
-    width: 34px; height: 34px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
+img, svg { display: block; }
 
-  header .logo svg { width: 20px; height: 20px; fill: white; }
+/* ---------- Header ---------- */
+.app-header {
+  background: var(--blue);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 60px;
+}
 
-  header h1 {
-    font-size: 15px;
-    font-weight: 600;
-    color: white;
-    letter-spacing: 0.01em;
-  }
+.app-header .logo {
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
-  header span {
-    font-size: 13px;
-    color: rgba(255,255,255,0.55);
-    margin-left: 4px;
-  }
+.app-header .logo svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+}
 
-  .container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-  }
+.app-header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.01em;
+}
 
-  .card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 1.75rem 2rem;
-    margin-bottom: 1.5rem;
-  }
+.app-header .subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-left: 4px;
+  font-weight: 400;
+}
 
-  .card-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+/* ---------- Layout ---------- */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
 
-  .card-title::before {
-    content: '';
-    width: 3px; height: 16px;
-    background: var(--blue-mid);
-    border-radius: 2px;
-    display: inline-block;
-  }
+/* ---------- Card ---------- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.5rem;
+}
 
-  .field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+.card-title::before {
+  content: '';
+  width: 3px;
+  height: 16px;
+  background: var(--blue-mid);
+  border-radius: 2px;
+  display: inline-block;
+}
 
-  label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
+/* ---------- Form fields ---------- */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
-  input[type="text"] {
-    border: 1.5px solid var(--border);
-    border-radius: 7px;
-    padding: 9px 12px;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-    background: var(--white);
-  }
+.field-row:last-child { margin-bottom: 0; }
 
-  input[type="text"]:focus { border-color: var(--blue-mid); }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-  .drop-zone {
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 1.5rem 1.25rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.15s;
-    background: var(--surface);
-    position: relative;
-  }
+label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 
-  .drop-zone:hover, .drop-zone.over {
-    border-color: var(--blue-mid);
-    background: var(--blue-light);
-  }
+input[type="text"] {
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  background: var(--white);
+  width: 100%;
+  font-family: inherit;
+}
 
-  .drop-zone input[type="file"] {
-    position: absolute; inset: 0;
-    opacity: 0; cursor: pointer;
-    width: 100%; height: 100%;
-  }
+input[type="text"]:focus { border-color: var(--blue-mid); }
+input[type="text"]::placeholder { color: #A7B2C0; }
 
-  .drop-zone .icon {
-    font-size: 28px;
-    margin-bottom: 6px;
-  }
+/* ---------- Upload / drop zone ---------- */
+.files-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
 
-  .drop-zone p {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
+.file-box {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
 
-  .drop-zone strong {
-    color: var(--blue-mid);
-  }
+.file-box-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
 
-  .file-list {
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--surface);
+  position: relative;
+}
 
-  .file-chip {
-    background: var(--blue-light);
-    border: 1px solid #C5D4E8;
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-    color: var(--blue);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+.drop-zone:hover,
+.drop-zone.over {
+  border-color: var(--blue-mid);
+  background: var(--blue-light);
+}
 
-  .file-chip .remove {
-    cursor: pointer;
-    color: #8B9DB0;
-    font-size: 14px;
-    line-height: 1;
-  }
+.drop-zone .icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
 
-  .file-chip .remove:hover { color: var(--red); }
+.drop-zone p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
 
-  .files-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
+.drop-zone strong { color: var(--blue-mid); }
 
-  .file-box {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem 1.25rem;
-  }
+.drop-zone .hint {
+  font-size: 11px;
+  margin-top: 4px;
+  color: #8B9DB0;
+}
 
-  .file-box-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    margin-bottom: 8px;
-  }
+.file-list {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
-  .run-btn {
-    background: var(--blue);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 28px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+.file-chip {
+  background: var(--blue-light);
+  border: 1px solid #C5D4E8;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-  .run-btn:hover { background: var(--blue-mid); }
-  .run-btn:active { transform: scale(0.98); }
-  .run-btn:disabled { background: #A0AEC0; cursor: not-allowed; transform: none; }
+.file-chip .remove {
+  cursor: pointer;
+  color: #8B9DB0;
+  font-size: 14px;
+  line-height: 1;
+}
 
-  .run-btn svg { width: 16px; height: 16px; fill: none; stroke: white; stroke-width: 2; }
+.file-chip .remove:hover { color: var(--red); }
 
-  #progress-area {
-    display: none;
-  }
+/* ---------- Buttons ---------- */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
 
-  .progress-bar-wrap {
-    background: var(--border);
-    border-radius: 100px;
-    height: 6px;
-    margin: 12px 0 8px;
-    overflow: hidden;
-  }
+.btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
 
-  .progress-bar {
-    height: 100%;
-    background: var(--blue-mid);
-    border-radius: 100px;
-    transition: width 0.3s ease;
-    width: 0%;
-  }
+.btn-primary {
+  background: var(--blue);
+  color: white;
+}
+.btn-primary:hover { background: var(--blue-mid); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary[disabled] { background: #A0AEC0; cursor: not-allowed; transform: none; }
 
-  .progress-label {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+.btn-success {
+  background: var(--green-text);
+  color: white;
+  padding: 10px 20px;
+  font-size: 13px;
+}
+.btn-success:hover { opacity: 0.88; }
 
-  #results-area { display: none; }
+/* ---------- Progress ---------- */
+.progress-area { margin-top: 1rem; }
 
+.progress-bar-wrap {
+  background: var(--border);
+  border-radius: 100px;
+  height: 6px;
+  margin: 12px 0 8px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--blue-mid);
+  border-radius: 100px;
+  width: 42%;
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- Alerts ---------- */
+.error-msg {
+  background: var(--red-light);
+  border: 1px solid #F5C6CB;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #9B1C1C;
+  margin-top: 1rem;
+}
+
+.all-clear {
+  background: var(--green);
+  border: 1px solid #A9DFBF;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--green-text);
+  margin-bottom: 1rem;
+}
+
+/* ---------- Summary stat cards ---------- */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--blue);
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+.stat-card.good .stat-num { color: var(--green-text); }
+.stat-card.warn .stat-num { color: #C0710A; }
+
+/* ---------- Legend ---------- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Tabs ---------- */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: color 0.15s;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  font-family: inherit;
+}
+
+.tab:hover { color: var(--blue); }
+.tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+.tab-badge {
+  display: inline-block;
+  background: var(--red);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 1px 6px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ---------- Table ---------- */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th {
+  background: var(--blue);
+  color: white;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  position: sticky;
+  top: 0;
+}
+
+td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+
+.mono { font-size: 11px; font-family: 'Consolas', monospace; }
+
+/* Row status colors */
+.row-green td { background: var(--green); }
+.row-red td { background: var(--red-light); }
+.row-orange td { background: var(--orange-light); }
+.row-yellow td { background: var(--yellow-light); }
+.row-purple td { background: var(--purple-light); }
+.row-blue td { background: var(--blue-row-light); }
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-green { background: var(--green); color: var(--green-text); }
+.badge-red { background: var(--red-light); color: #9B1C1C; }
+.badge-orange { background: var(--orange-light); color: #7D4A00; }
+.badge-yellow { background: var(--yellow-light); color: #7B6200; }
+.badge-purple { background: var(--purple-light); color: #5B2D8A; }
+.badge-blue { background: var(--blue-row-light); color: #1A4E7A; }
+
+.empty-msg {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .field-row,
+  .files-grid,
   .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 1.5rem;
+    grid-template-columns: 1fr;
   }
+  .container { padding: 1rem; }
+  .app-header { padding: 0 1rem; }
+  .app-header .subtitle { display: none; }
+}
 
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    text-align: center;
-  }
+@media (max-width: 900px) and (min-width: 641px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
-  .stat-num {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--blue);
-    line-height: 1.1;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 4px;
-  }
-
-  .stat-card.good .stat-num { color: var(--green-text); }
-  .stat-card.warn .stat-num { color: #C0710A; }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 1.25rem;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .swatch {
-    width: 14px; height: 14px;
-    border-radius: 3px;
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-
-  .tab-bar {
-    display: flex;
-    gap: 4px;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 1rem;
-    overflow-x: auto;
-  }
-
-  .tab {
-    padding: 8px 14px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    white-space: nowrap;
-    transition: color 0.15s;
-  }
-
-  .tab:hover { color: var(--blue); }
-  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
-
-  .tab-badge {
-    display: inline-block;
-    background: var(--red);
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-    border-radius: 10px;
-    padding: 1px 6px;
-    margin-left: 4px;
-    vertical-align: middle;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-  }
-
-  th {
-    background: var(--blue);
-    color: white;
-    padding: 8px 10px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    position: sticky;
-    top: 0;
-  }
-
-  td {
-    padding: 7px 10px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-
-  tr:last-child td { border-bottom: none; }
-
-  .table-wrap {
-    overflow-x: auto;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    max-height: 420px;
-    overflow-y: auto;
-  }
-
-  .row-green td { background: var(--green); }
-  .row-red td { background: var(--red-light); }
-  .row-orange td { background: var(--orange-light); }
-  .row-yellow td { background: var(--yellow-light); }
-  .row-purple td { background: var(--purple-light); }
-  .row-blue td { background: var(--blue-row-light); }
-
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .badge-green { background: var(--green); color: var(--green-text); }
-  .badge-red { background: var(--red-light); color: #9B1C1C; }
-  .badge-orange { background: var(--orange-light); color: #7D4A00; }
-  .badge-yellow { background: var(--yellow-light); color: #7B6200; }
-  .badge-purple { background: var(--purple-light); color: #5B2D8A; }
-  .badge-blue { background: var(--blue-row-light); color: #1A4E7A; }
-
-  .download-btn {
-    background: var(--green-text);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: opacity 0.15s;
-  }
-
-  .download-btn:hover { opacity: 0.88; }
-
-  .empty-msg {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-
-  .all-clear {
-    background: var(--green);
-    border: 1px solid #A9DFBF;
-    border-radius: 8px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--green-text);
-    margin-bottom: 1rem;
-  }
-
-  .error-msg {
-    background: var(--red-light);
-    border: 1px solid #F5C6CB;
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    color: #9B1C1C;
-    margin-top: 1rem;
-    display: none;
-  }
-
-  @media (max-width: 640px) {
-    .field-row, .files-grid, .summary-grid { grid-template-columns: 1fr; }
-    .container { padding: 1rem; }
-  }
 </style>
 </head>
 <body>
 
-<header>
+<!-- =========================================================
+     HEADER
+========================================================= -->
+<header class="app-header">
   <div class="logo">
+    <!-- Generic placeholder icon (no proprietary asset) -->
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
   </div>
-  <h1>Payroll Bank Comparator <span>— Three D Integrated Solutions</span></h1>
+  <h1>Payroll Bank Comparator <span class="subtitle">— Sample Company Ltd.</span></h1>
 </header>
 
 <div class="container">
 
-  <!-- Step 1: Setup -->
-  <div class="card">
-    <div class="card-title">Step 1 — Payroll details</div>
+  <!-- =========================================================
+       STEP 1 — Details form (static fields)
+  ========================================================= -->
+  <section class="card" aria-labelledby="step1-title">
+    <h2 class="card-title" id="step1-title">Step 1 — Payroll details</h2>
     <div class="field-row">
       <div class="field">
-        <label>Payroll run name</label>
-        <input type="text" id="payroll-name" placeholder="e.g. June 2026 BHS T3" />
+        <label for="payroll-name">Payroll run name</label>
+        <input type="text" id="payroll-name" placeholder="e.g. June 2026 Sample Run">
       </div>
       <div class="field">
-        <label>Excel password (if protected)</label>
-        <input type="text" id="excel-password" placeholder="Leave blank if not protected" />
+        <label for="excel-password">Excel password (if protected)</label>
+        <input type="text" id="excel-password" placeholder="Leave blank if not protected">
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Step 2: Files -->
-  <div class="card">
-    <div class="card-title">Step 2 — Upload files</div>
+  <!-- =========================================================
+       STEP 2 — Upload (static drop zones with sample chips)
+  ========================================================= -->
+  <section class="card" aria-labelledby="step2-title">
+    <h2 class="card-title" id="step2-title">Step 2 — Upload files</h2>
 
     <div class="files-grid">
+      <!-- Bank advice Excel upload box -->
       <div class="file-box">
         <div class="file-box-label">📊 Bank advice Excel (.xlsx / .xls)</div>
-        <div class="drop-zone" id="drop-excel">
-          <input type="file" id="file-excel" accept=".xlsx,.xls" />
+        <div class="drop-zone" id="drop-excel" tabindex="0" role="button" aria-label="Upload bank advice Excel file">
+          <input type="file" id="file-excel" accept=".xlsx,.xls" style="position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;">
           <div class="icon">📁</div>
           <p>Drop file here or <strong>click to browse</strong></p>
         </div>
         <div class="file-list" id="excel-chips"></div>
       </div>
 
+      <!-- Bank upload text files box -->
       <div class="file-box">
         <div class="file-box-label">📄 Bank upload text files (2–4 files)</div>
-        <div class="drop-zone" id="drop-txt">
-          <input type="file" id="file-txt" multiple />
+        <div class="drop-zone" id="drop-txt" tabindex="0" role="button" aria-label="Upload bank text files">
+          <input type="file" id="file-txt" multiple style="position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;">
           <div class="icon">📁</div>
           <p>Drop files here or <strong>click to browse</strong></p>
-          <p style="font-size:11px; margin-top:4px; color:#8B9DB0">HDFC (.20/.21) and NEFT (.clt) files</p>
+          <p class="hint">HDFC and NEFT format files</p>
         </div>
         <div class="file-list" id="txt-chips"></div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Step 3: Run -->
-  <div class="card">
-    <div class="card-title">Step 3 — Run comparison</div>
-    <button class="run-btn" id="run-btn" onclick="runComparison()">
+  <!-- =========================================================
+       STEP 3 — Run action (static button + progress state)
+  ========================================================= -->
+  <section class="card" aria-labelledby="step3-title">
+    <h2 class="card-title" id="step3-title">Step 3 — Run comparison</h2>
+    <button class="btn btn-primary" type="button" id="run-btn" onclick="runComparison()">
       <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       Run comparison
     </button>
-    <div id="error-msg" class="error-msg"></div>
 
-    <div id="progress-area" style="margin-top:1rem;">
-      <div class="progress-bar-wrap"><div class="progress-bar" id="prog-bar"></div></div>
-      <div class="progress-label" id="prog-label">Reading files…</div>
+    <!-- Error message — hidden until validation fails -->
+    <div class="error-msg" id="error-msg" style="display:none;"></div>
+
+    <!-- Progress bar — idle state, shown only while a run is in progress -->
+    <div class="progress-area" id="progress-area" style="display:none;">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="prog-bar" style="width:0%;"></div></div>
+      <div class="progress-label" id="prog-label">Comparing records…</div>
     </div>
-  </div>
+  </section>
 
-  <!-- Results -->
-  <div id="results-area">
-    <div class="card">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
-        <div class="card-title" style="margin-bottom:0">Results — <span id="result-name" style="font-weight:400; color:#5A6878;"></span></div>
-        <button class="download-btn" onclick="downloadReport()">
-          ⬇ Download Excel report
-        </button>
+  <!-- =========================================================
+       RESULTS (hidden until "Run comparison" is clicked; then
+       populated dynamically in this same visual format)
+  ========================================================= -->
+  <section class="card" id="results-area" aria-labelledby="results-title" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+      <h2 class="card-title" id="results-title" style="margin-bottom:0;">Results — <span id="result-name" style="font-weight:400; color:#5A6878;"></span></h2>
+      <button class="btn btn-success" type="button" id="download-btn" onclick="downloadReport()">⬇ Download Excel report</button>
+    </div>
+
+    <!-- Summary stat cards -->
+    <div class="summary-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="s-total">—</div>
+        <div class="stat-label">Total records</div>
       </div>
-
-      <div class="summary-grid">
-        <div class="stat-card">
-          <div class="stat-num" id="s-total">—</div>
-          <div class="stat-label">Total records</div>
-        </div>
-        <div class="stat-card good">
-          <div class="stat-num" id="s-match">—</div>
-          <div class="stat-label">Matched ✅</div>
-        </div>
-        <div class="stat-card warn">
-          <div class="stat-num" id="s-disc">—</div>
-          <div class="stat-label">Discrepancies ⚠</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="s-sections">4</div>
-          <div class="stat-label">Sections</div>
-        </div>
+      <div class="stat-card good">
+        <div class="stat-num" id="s-match">—</div>
+        <div class="stat-label">Matched ✅</div>
       </div>
-
-      <div id="all-clear-banner" class="all-clear" style="display:none;">
-        ✅ All records matched — no discrepancies found.
+      <div class="stat-card warn">
+        <div class="stat-num" id="s-disc">—</div>
+        <div class="stat-label">Discrepancies ⚠</div>
       </div>
-
-      <div class="legend">
-        <div class="legend-item"><div class="swatch" style="background:#D5F5E3"></div> Match</div>
-        <div class="legend-item"><div class="swatch" style="background:#FDEAEA"></div> Amount mismatch</div>
-        <div class="legend-item"><div class="swatch" style="background:#FFF3E0"></div> Missing in bank file</div>
-        <div class="legend-item"><div class="swatch" style="background:#EBF5FB"></div> Missing in Excel</div>
-        <div class="legend-item"><div class="swatch" style="background:#FFFDE7"></div> Name mismatch</div>
-        <div class="legend-item"><div class="swatch" style="background:#F5EEF8"></div> IFSC mismatch</div>
-      </div>
-
-      <div class="tab-bar" id="tab-bar"></div>
-      <div class="table-wrap">
-        <table id="results-table">
-          <thead id="results-thead"></thead>
-          <tbody id="results-tbody"></tbody>
-        </table>
+      <div class="stat-card">
+        <div class="stat-num" id="s-sections">4</div>
+        <div class="stat-label">Sections</div>
       </div>
     </div>
-  </div>
+
+    <!-- All-clear banner -->
+    <div class="all-clear" id="all-clear-banner" style="display:none;">
+      ✅ All records matched — no discrepancies found.
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item"><span class="swatch" style="background:#D5F5E3"></span> Match</div>
+      <div class="legend-item"><span class="swatch" style="background:#FDEAEA"></span> Amount mismatch</div>
+      <div class="legend-item"><span class="swatch" style="background:#FFF3E0"></span> Missing in bank file</div>
+      <div class="legend-item"><span class="swatch" style="background:#EBF5FB"></span> Missing in Excel</div>
+      <div class="legend-item"><span class="swatch" style="background:#FFFDE7"></span> Name mismatch</div>
+      <div class="legend-item"><span class="swatch" style="background:#F5EEF8"></span> IFSC mismatch</div>
+    </div>
+
+    <!-- Tab bar — built dynamically, same markup/classes as design -->
+    <div class="tab-bar" id="tab-bar" role="tablist"></div>
+
+    <!-- Results table — same column format as the design; rows populated dynamically -->
+    <div class="table-wrap">
+      <table id="results-table">
+        <thead id="results-thead"></thead>
+        <tbody id="results-tbody"></tbody>
+      </table>
+    </div>
+  </section>
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
+/* =========================================================
+   Payroll Bank Comparator — functional layer
+   Accepts real file drops/selections, runs the comparison,
+   and renders results into the same visual format above.
+========================================================= */
 let excelFile = null;
 let txtFiles = [];
 let allResults = {};
 let currentTab = 'disc';
 
 // ── File handling ──────────────────────────────────────────────────────────
-document.getElementById('file-excel').addEventListener('change', function(e) {
+document.getElementById('file-excel').addEventListener('change', function (e) {
   if (e.target.files[0]) setExcelFile(e.target.files[0]);
 });
 
-document.getElementById('file-txt').addEventListener('change', function(e) {
+document.getElementById('file-txt').addEventListener('change', function (e) {
   addTxtFiles(Array.from(e.target.files));
 });
 
-['drop-excel','drop-txt'].forEach(id => {
+['drop-excel', 'drop-txt'].forEach(id => {
   const el = document.getElementById(id);
   el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('over'); });
   el.addEventListener('dragleave', () => el.classList.remove('over'));
@@ -640,6 +712,15 @@ function addTxtFiles(files) {
     if (!txtFiles.find(x => x.name === f.name)) txtFiles.push(f);
   });
   renderTxtChips();
+  // Parse each newly-added file immediately so the chip can show kind + row count
+  files.forEach(f => {
+    readFileAsText(f).then(text => {
+      const type = detectFileType(text);
+      const records = type === 'HDFC' ? parseHDFC(text) : parseNEFT(text);
+      const entry = txtFiles.find(x => x.name === f.name);
+      if (entry) { entry._kind = type; entry._rowCount = records.length; renderTxtChips(); }
+    }).catch(() => { /* leave chip without badge if the file can't be read */ });
+  });
 }
 
 function removeTxtFile(name) {
@@ -650,11 +731,22 @@ function removeTxtFile(name) {
 function renderTxtChips() {
   const chips = document.getElementById('txt-chips');
   chips.innerHTML = '';
-  txtFiles.forEach(f => chips.appendChild(makeChip(f.name, () => removeTxtFile(f.name))));
+  txtFiles.forEach(f => chips.appendChild(makeTxtChip(f)));
+}
+
+function makeTxtChip(f) {
+  const d = document.createElement('span');
+  d.className = 'file-chip';
+  const badge = f._kind
+    ? `<span class="badge ${f._kind === 'HDFC' ? 'badge-blue' : 'badge-green'}" style="margin-left:6px;">${f._kind === 'HDFC' ? 'TSAL' : 'TNES'}</span> <span style="color:var(--text-muted); font-weight:400;">${f._rowCount} rows</span>`
+    : `<span style="color:var(--text-muted); font-weight:400; margin-left:6px;">reading…</span>`;
+  d.innerHTML = `<span>${f.name}</span>${badge}<span class="remove" title="Remove">×</span>`;
+  d.querySelector('.remove').onclick = () => removeTxtFile(f.name);
+  return d;
 }
 
 function makeChip(name, onRemove) {
-  const d = document.createElement('div');
+  const d = document.createElement('span');
   d.className = 'file-chip';
   d.innerHTML = `<span>${name}</span><span class="remove" title="Remove">×</span>`;
   d.querySelector('.remove').onclick = onRemove;
@@ -672,7 +764,7 @@ function nameSimilar(a, b) {
   const inter = [...wa].filter(x => wb.has(x));
   if (inter.length / Math.max(wa.size, wb.size) >= 0.6) return true;
   const shorter = a.length <= b.length ? a : b;
-  const longer  = a.length <= b.length ? b : a;
+  const longer = a.length <= b.length ? b : a;
   const matches = [...shorter].filter(c => longer.includes(c)).length;
   return matches / longer.length >= 0.82;
 }
@@ -742,27 +834,27 @@ function parseNEFT(text) {
 }
 
 function parseExcelSection(rows, bankType) {
-  const skip = new Set(['SLNO','BANK TOTAL','NEFT TOTAL','TOTAL','GRAND TOTAL','ON SAL REG','DIFFERENCE','HOLD','CHEQUE','NEFT','OT']);
+  const skip = new Set(['SLNO', 'BANK TOTAL', 'NEFT TOTAL', 'TOTAL', 'GRAND TOTAL', 'ON SAL REG', 'DIFFERENCE', 'HOLD', 'CHEQUE', 'NEFT', 'OT']);
   const sections = [];
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
-    const vals = r.map(v => String(v||'').trim().toUpperCase());
-    const valsNS = vals.map(v => v.replace(/\s+/g,''));
+    const vals = r.map(v => String(v || '').trim().toUpperCase());
+    const valsNS = vals.map(v => v.replace(/\s+/g, ''));
     if (vals.includes('SLNO') && vals.includes('EMP_CODE') && (valsNS.includes('BANKACNO') || valsNS.includes('BANKACCNO'))) {
       let end = rows.length;
       let ifscCol = null, nibCol = null;
-      vals.forEach((v,idx) => {
-        const vns = v.replace(/\s+/g,'');
+      vals.forEach((v, idx) => {
+        const vns = v.replace(/\s+/g, '');
         if (vns === 'IFSCCODE' || vns === 'IFSC') ifscCol = idx;
         if (vns === 'NAMEINBANK' || vns === 'BANKNAME') nibCol = idx;
       });
       ifscCol = ifscCol ?? 7; nibCol = nibCol ?? 8;
-      for (let j = i+1; j < rows.length; j++) {
-        const rv = rows[j].map(v => String(v||'').trim().toUpperCase());
-        if (['BANK TOTAL','NEFT TOTAL','TOTAL'].some(t => rv.includes(t) || rv[0] === t)) { end = j; break; }
+      for (let j = i + 1; j < rows.length; j++) {
+        const rv = rows[j].map(v => String(v || '').trim().toUpperCase());
+        if (['BANK TOTAL', 'NEFT TOTAL', 'TOTAL'].some(t => rv.includes(t) || rv[0] === t)) { end = j; break; }
         if (rv.includes('SLNO') && rv.includes('EMP_CODE')) { end = j; break; }
       }
-      sections.push({ start: i+1, end, ifscCol, nibCol });
+      sections.push({ start: i + 1, end, ifscCol, nibCol });
     }
   }
   const records = [];
@@ -770,108 +862,259 @@ function parseExcelSection(rows, bankType) {
     for (let i = start; i < end; i++) {
       const row = rows[i];
       if (!row[0] && !row[1]) continue;
-      const first = String(row[0]||'').trim().toUpperCase();
+      const first = String(row[0] || '').trim().toUpperCase();
       if (skip.has(first)) continue;
       if (!row[1]) continue;
-      const bank = String(row[3]||'').trim().toUpperCase();
+      const bank = String(row[3] || '').trim().toUpperCase();
       if (bankType === 'HDFC' && !bank.includes('HDFC')) continue;
       if (bankType === 'OTHER' && !bank.includes('OTHER') && !bank.includes('NEFT')) continue;
       let pay;
-      try { pay = parseInt(parseFloat(String(row[5]))); } catch(e) { continue; }
+      try { pay = parseInt(parseFloat(String(row[5]))); } catch (e) { continue; }
       if (!pay || pay <= 0) continue;
-      const acc = String(row[4]||'').trim();
+      const acc = String(row[4] || '').trim();
       if (!acc) continue;
       records.push({
-        emp_code: String(row[1]||'').trim().toUpperCase(),
-        name: String(row[2]||'').trim().toUpperCase(),
+        emp_code: String(row[1] || '').trim().toUpperCase(),
+        name: String(row[2] || '').trim().toUpperCase(),
         account: acc,
-        ifsc: String(row[ifscCol]||'').trim().toUpperCase(),
+        ifsc: String(row[ifscCol] || '').trim().toUpperCase(),
         amount: pay,
-        name_in_bank: String(row[nibCol]||'').trim().toUpperCase()
+        name_in_bank: String(row[nibCol] || '').trim().toUpperCase()
       });
     }
   }
   return records;
 }
 
-function compareAll(excelList, txtList, category) {
-  const excelMap = Object.fromEntries(excelList.map(r => [r.account, r]));
-  const txtMap   = Object.fromEntries(txtList.map(r => [r.account, r]));
-  const rows = [];
-  const seen = new Set();
-  const orderedAccs = excelList.map(r => r.account);
-  txtList.forEach(r => { if (!excelMap[r.account]) orderedAccs.push(r.account); });
+function cleanId(s) { return String(s || '').trim().toUpperCase(); }
 
-  for (const acc of orderedAccs) {
-    if (seen.has(acc)) continue; seen.add(acc);
-    const e = excelMap[acc], t = txtMap[acc];
-    if (e && !t) {
-      rows.push({ category, account: acc, status: 'Missing in bank file',
-        excel_name: e.name, excel_amt: e.amount, excel_ifsc: e.ifsc||'',
-        txt_name: '—', txt_amt: '—', txt_ifsc: '—', color: 'ORANGE' });
-    } else if (t && !e) {
-      rows.push({ category, account: acc, status: 'Missing in Excel',
-        excel_name: '—', excel_amt: '—', excel_ifsc: '—',
-        txt_name: t.name, txt_amt: t.amount, txt_ifsc: t.ifsc||'', color: 'BLUE' });
-    } else {
-      const issues = []; let color = 'GREEN';
-      if (e.amount !== t.amount) {
-        issues.push(`Amount: Excel ${e.amount} ≠ Bank ${t.amount}`);
-        color = 'RED';
+/**
+ * Compares advice rows against bank-output rows for one sheet×category combination.
+ * hasEmpCode: true for NEFT/TNES-type files (which carry an emp code + IFSC field);
+ * false for HDFC/TSAL-type files (ACCOUNT,C,AMOUNT,NARRATION only — no independent ID).
+ *
+ * Join priority: EMP_CODE (when available on both sides) > ACCOUNT NUMBER (exact) >
+ * fuzzy NAME match against any still-unmatched bank row (last resort, used so an account-number
+ * typo doesn't just show up as two separate "missing" rows — it gets surfaced as an Account
+ * Number mismatch on an otherwise-identified employee instead).
+ *
+ * Once a pair is matched (by whichever method), all five checks run independently:
+ * Amount, Emp ID, Name (fuzzy), Account Number, IFSC.
+ */
+function compareAll(excelList, txtList, category, hasEmpCode) {
+  const rows = [];
+  const usedExcel = new Set(), usedTxt = new Set();
+  const txtByAccount = new Map(txtList.map((r, i) => [r.account, i]));
+  const txtByEmpCode = hasEmpCode ? new Map(txtList.filter(r => r.emp_code).map((r, i) => [cleanId(r.emp_code), i])) : new Map();
+
+  const pairs = []; // { e, t }
+
+  // Pass 1: join by EMP_CODE where both sides have one (most authoritative — survives a
+  // changed/incorrect account number or a typo'd name).
+  if (hasEmpCode) {
+    excelList.forEach((e, ei) => {
+      if (usedExcel.has(ei) || !e.emp_code) return;
+      const ti = txtByEmpCode.get(cleanId(e.emp_code));
+      if (ti !== undefined && !usedTxt.has(ti)) {
+        pairs.push({ e, t: txtList[ti] }); usedExcel.add(ei); usedTxt.add(ti);
       }
-      const en = clean(e.name), nib = clean(e.name_in_bank||''), tn = clean(t.name);
-      if (!nameSimilar(en, tn) && !nameSimilar(nib, tn)) {
-        issues.push(`Name: ${e.name} ≠ ${t.name}`);
-        if (color === 'GREEN') color = 'YELLOW';
-      }
-      const ei = (e.ifsc||'').toUpperCase(), ti = (t.ifsc||'').toUpperCase();
-      if (ei && ti && ei !== ti) {
-        issues.push(`IFSC: ${ei} ≠ ${ti}`);
-        if (color === 'GREEN') color = 'PURPLE';
-      }
-      rows.push({ category, account: acc,
-        status: issues.length ? issues.join(' | ') : '✅ Match',
-        excel_name: e.name, excel_amt: e.amount, excel_ifsc: e.ifsc||'',
-        txt_name: t.name, txt_amt: t.amount, txt_ifsc: t.ifsc||'', color });
-    }
+    });
   }
+  // Pass 2: join by exact account number for anything not already matched.
+  excelList.forEach((e, ei) => {
+    if (usedExcel.has(ei)) return;
+    const ti = txtByAccount.get(e.account);
+    if (ti !== undefined && !usedTxt.has(ti)) {
+      pairs.push({ e, t: txtList[ti] }); usedExcel.add(ei); usedTxt.add(ti);
+    }
+  });
+  // Pass 3: fuzzy-name fallback — catches a genuine account-number mismatch (or, for
+  // HDFC/TSAL files with no emp code at all, the only way to recognize the same employee).
+  excelList.forEach((e, ei) => {
+    if (usedExcel.has(ei)) return;
+    const en = clean(e.name), nib = clean(e.name_in_bank || '');
+    let bestTi = -1;
+    txtList.forEach((t, ti) => {
+      if (usedTxt.has(ti)) return;
+      const tn = clean(t.name);
+      if (nameSimilar(en, tn) || nameSimilar(nib, tn)) bestTi = ti;
+    });
+    if (bestTi !== -1) { pairs.push({ e, t: txtList[bestTi] }); usedExcel.add(ei); usedTxt.add(bestTi); }
+  });
+
+  // Anything still unmatched is genuinely missing on one side.
+  excelList.forEach((e, ei) => {
+    if (usedExcel.has(ei)) return;
+    rows.push({
+      category, account: e.account, status: 'Missing in bank file',
+      excel_name: e.name, excel_amt: e.amount, excel_ifsc: e.ifsc || '',
+      txt_name: '—', txt_amt: '—', txt_ifsc: '—', color: 'ORANGE'
+    });
+  });
+  txtList.forEach((t, ti) => {
+    if (usedTxt.has(ti)) return;
+    rows.push({
+      category, account: t.account, status: 'Missing in Excel',
+      excel_name: '—', excel_amt: '—', excel_ifsc: '—',
+      txt_name: t.name, txt_amt: t.amount, txt_ifsc: t.ifsc || '', color: 'BLUE'
+    });
+  });
+
+  // Run all 5 checks on every matched pair.
+  pairs.forEach(({ e, t }) => {
+    const issues = [];
+    let hasCritical = false; // amount / emp id / account -> RED
+    let hasName = false;     // -> YELLOW
+    let hasIfsc = false;     // -> PURPLE
+
+    // 1. Amount
+    if (e.amount !== t.amount) {
+      issues.push(`Amount: Excel ${e.amount} ≠ Bank ${t.amount}`);
+      hasCritical = true;
+    }
+    // 2. Emp ID (only meaningful where the bank file actually carries one)
+    if (hasEmpCode && e.emp_code && t.emp_code && cleanId(e.emp_code) !== cleanId(t.emp_code)) {
+      issues.push(`Emp ID: Excel ${e.emp_code} ≠ Bank ${t.emp_code}`);
+      hasCritical = true;
+    }
+    // 3. Name — fuzzy logic only
+    const en = clean(e.name), nib = clean(e.name_in_bank || ''), tn = clean(t.name);
+    if (!nameSimilar(en, tn) && !nameSimilar(nib, tn)) {
+      issues.push(`Name: ${e.name} ≠ ${t.name}`);
+      hasName = true;
+    }
+    // 4. Account number
+    if (e.account !== t.account) {
+      issues.push(`Account: Excel ${e.account} ≠ Bank ${t.account}`);
+      hasCritical = true;
+    }
+    // 5. IFSC (only present on NEFT/TNES-type bank rows)
+    const ei = (e.ifsc || '').toUpperCase(), ti = (t.ifsc || '').toUpperCase();
+    if (ei && ti && ei !== ti) {
+      issues.push(`IFSC: ${ei} ≠ ${ti}`);
+      hasIfsc = true;
+    }
+
+    let color = 'GREEN';
+    if (hasCritical) color = 'RED';
+    else if (hasName) color = 'YELLOW';
+    else if (hasIfsc) color = 'PURPLE';
+
+    rows.push({
+      category, account: e.account,
+      status: issues.length ? issues.join(' | ') : '✅ Match',
+      excel_name: e.name, excel_amt: e.amount, excel_ifsc: e.ifsc || '',
+      txt_name: t.name, txt_amt: t.amount, txt_ifsc: t.ifsc || '', color
+    });
+  });
+
   return rows;
 }
 
 function accsOf(list) { return new Set(list.map(r => r.account)); }
 
-function classifyFiles(hdfcFiles, xlSalHdfc, xlOtHdfc, neftFiles, xlSalNeft, xlOtNeft) {
-  let hdfcSal = [], hdfcOt = [], neftSal = [], neftOt = [];
-  const salH = accsOf(xlSalHdfc), otH = accsOf(xlOtHdfc);
-  const salN = accsOf(xlSalNeft), otN = accsOf(xlOtNeft);
+/** Extract the trailing serial number from a bank file name, e.g. "275TSAL0607.47" -> 47 */
+function extractSerial(filename) {
+  const m = filename.match(/\.(\d+)$/);
+  return m ? parseInt(m[1], 10) : null;
+}
 
-  if (hdfcFiles.length === 2) {
-    const [r0, r1] = hdfcFiles.map(f => accsOf(f.records));
-    const sA = [...r0].filter(a => salH.has(a)).length + [...r1].filter(a => otH.has(a)).length;
-    const sB = [...r0].filter(a => otH.has(a)).length  + [...r1].filter(a => salH.has(a)).length;
-    if (sA >= sB) { hdfcSal = hdfcFiles[0].records; hdfcOt = hdfcFiles[1].records; }
-    else          { hdfcOt  = hdfcFiles[0].records; hdfcSal = hdfcFiles[1].records; }
-  } else if (hdfcFiles.length === 1) {
-    const accs = accsOf(hdfcFiles[0].records);
-    const sh = [...accs].filter(a => salH.has(a)).length;
-    const oh = [...accs].filter(a => otH.has(a)).length;
-    if (sh >= oh) hdfcSal = hdfcFiles[0].records; else hdfcOt = hdfcFiles[0].records;
+/**
+ * Groups uploaded bank files into pairs by ascending serial number: files with the two
+ * lowest serials form pair 1, the next two form pair 2, and so on (matches the real-world
+ * convention where a SAL file and its companion NES file share consecutive serials, e.g.
+ * 275TSAL0607.47 + 275TNES0607.48).
+ */
+function pairFilesBySerial(parsedFiles) {
+  const withSerial = parsedFiles.filter(f => f.serial !== null);
+  const withoutSerial = parsedFiles.filter(f => f.serial === null);
+  withSerial.sort((a, b) => a.serial - b.serial);
+  const pairs = [];
+  for (let i = 0; i < withSerial.length; i += 2) {
+    pairs.push(withSerial[i + 1] ? [withSerial[i], withSerial[i + 1]] : [withSerial[i]]);
+  }
+  if (withoutSerial.length) pairs.push(withoutSerial);
+  return pairs;
+}
+
+function pairAccounts(pair) {
+  const s = new Set();
+  pair.forEach(f => f.records.forEach(r => s.add(r.account)));
+  return s;
+}
+
+/** Fraction of the pair's accounts that are found in the sheet's advice accounts (0..1). */
+function overlapRatio(pairAccs, sheetAccs) {
+  if (pairAccs.size === 0) return 0;
+  let hit = 0;
+  pairAccs.forEach(a => { if (sheetAccs.has(a)) hit++; });
+  return hit / pairAccs.size;
+}
+
+const CONFIDENCE_THRESHOLD = 0.95;
+
+/**
+ * Assigns each uploaded bank-file pair to the Salary or OT advice sheet.
+ *   - Single-sheet advice files get their one pair (there should only be one).
+ *   - Two-sheet advice files: prefer the sheet-name-based hypothesis (whichever candidate
+ *     sheet name contains "OT" is OT; the lower-serial pair maps to Salary, the higher-serial
+ *     pair maps to OT — matching the stated convention), but only trust it if it clears a 95%
+ *     account-overlap check against the real sheet data. If sheet names are ambiguous or the
+ *     name-based hypothesis fails the overlap check, fall back to whichever pair<->sheet
+ *     assignment (of the two possible pairings) yields the higher combined overlap, and warn
+ *     if even that best-effort assignment doesn't clear 95% on one or both sides.
+ */
+function assignPairsToSheets(pairs, sheetInfo, warnings) {
+  // sheetInfo: { salName, otName, salAccs (Set), otAccs (Set) } — otName/otAccs may be null
+  const result = { salPair: null, otPair: null };
+
+  if (!sheetInfo.otName) {
+    // Single advice sheet — expect exactly one pair; use the first, warn about any extras.
+    result.salPair = pairs[0] || null;
+    if (pairs.length > 1) {
+      warnings.push(`Advice file has only one sheet, but ${pairs.length} bank file pairs were uploaded — only the first pair (by serial number) was used; the rest were ignored.`);
+    }
+    return result;
   }
 
-  if (neftFiles.length === 2) {
-    const [r0, r1] = neftFiles.map(f => accsOf(f.records));
-    const sA = [...r0].filter(a => salN.has(a)).length + [...r1].filter(a => otN.has(a)).length;
-    const sB = [...r0].filter(a => otN.has(a)).length  + [...r1].filter(a => salN.has(a)).length;
-    if (sA >= sB) { neftSal = neftFiles[0].records; neftOt = neftFiles[1].records; }
-    else          { neftOt  = neftFiles[0].records; neftSal = neftFiles[1].records; }
-  } else if (neftFiles.length === 1) {
-    const accs = accsOf(neftFiles[0].records);
-    const sh = [...accs].filter(a => salN.has(a)).length;
-    const oh = [...accs].filter(a => otN.has(a)).length;
-    if (sh >= oh) neftSal = neftFiles[0].records; else neftOt = neftFiles[0].records;
+  if (pairs.length < 2) {
+    warnings.push('Advice file has two sheets (Salary and OT), but fewer than 2 bank file pairs were uploaded — please upload a SAL/NES pair for each sheet.');
+    result.salPair = pairs[0] || null;
+    return result;
   }
 
-  return { hdfcSal, hdfcOt, neftSal, neftOt };
+  const [pairLow, pairHigh] = pairs; // sorted ascending by serial already
+  const accsLow = pairAccounts(pairLow), accsHigh = pairAccounts(pairHigh);
+
+  // Hypothesis A: lower-serial pair -> Salary, higher-serial pair -> OT (the stated convention)
+  const aSal = overlapRatio(accsLow, sheetInfo.salAccs);
+  const aOt = overlapRatio(accsHigh, sheetInfo.otAccs);
+  // Hypothesis B: swapped
+  const bSal = overlapRatio(accsHigh, sheetInfo.salAccs);
+  const bOt = overlapRatio(accsLow, sheetInfo.otAccs);
+
+  const aConfident = aSal >= CONFIDENCE_THRESHOLD && aOt >= CONFIDENCE_THRESHOLD;
+  const bConfident = bSal >= CONFIDENCE_THRESHOLD && bOt >= CONFIDENCE_THRESHOLD;
+
+  if (aConfident) {
+    result.salPair = pairLow; result.otPair = pairHigh;
+  } else if (bConfident) {
+    result.salPair = pairHigh; result.otPair = pairLow;
+    warnings.push('Bank file pairs did not follow the expected serial order (lower serials = Salary), but were matched to the correct sheet by account-number overlap instead.');
+  } else {
+    // Neither hypothesis reaches 95% on both sides — use whichever totals higher and warn.
+    const totalA = aSal + aOt, totalB = bSal + bOt;
+    if (totalA >= totalB) { result.salPair = pairLow; result.otPair = pairHigh; }
+    else { result.salPair = pairHigh; result.otPair = pairLow; }
+    warnings.push(`Low-confidence sheet mapping: bank file pairs could not be matched to the Salary/OT sheets with ≥95% account overlap (best match was ${Math.round(Math.max(totalA, totalB) / 2 * 100)}%). Please verify the results below carefully before submitting.`);
+  }
+  return result;
+}
+
+function splitPairByKind(pair) {
+  const hdfc = pair.find(f => f.kind === 'HDFC');
+  const neft = pair.find(f => f.kind === 'NEFT');
+  return { hdfcRecords: hdfc ? hdfc.records : [], neftRecords: neft ? neft.records : [] };
 }
 
 // ── Main run ──────────────────────────────────────────────────────────────
@@ -889,76 +1132,103 @@ function showError(msg) {
 async function runComparison() {
   const name = document.getElementById('payroll-name').value.trim();
   document.getElementById('error-msg').style.display = 'none';
+  document.getElementById('results-area').style.display = 'none';
 
   if (!name) return showError('Please enter a payroll run name.');
   if (!excelFile) return showError('Please upload the bank advice Excel file.');
-  if (txtFiles.length < 2) return showError('Please upload at least 2 bank upload text files.');
+  if (txtFiles.length < 1) return showError('Please upload at least 1 bank upload text file.');
 
   document.getElementById('run-btn').disabled = true;
   document.getElementById('progress-area').style.display = 'block';
-  document.getElementById('results-area').style.display = 'none';
 
   try {
     setProgress(10, 'Reading Excel bank advice…');
     const excelBuf = await readFileAsArrayBuffer(excelFile);
     const wb = XLSX.read(excelBuf, { type: 'array' });
 
-    let salSheet = null, otSheet = null;
-    for (const sname of wb.SheetNames) {
-      const u = sname.toUpperCase();
-      if ((u.includes('SAL') || u.includes('SALARY') || u.includes('BANK TRANSFER')) && !salSheet) salSheet = wb.Sheets[sname];
-      if (u.includes('OT') && !u.includes('SAL') && !otSheet) otSheet = wb.Sheets[sname];
+    // Detect which sheets actually contain advice data by CONTENT (SLNO + EMP_CODE headers),
+    // never by assuming a specific sheet name or position. Among the content-valid sheets,
+    // whichever one's name contains "OT" is the OT sheet; the other candidate is Salary —
+    // this handles real-world sheet names like "BANK ADVISE" / "OT BANK ADVISE" where the
+    // Salary sheet has no "SAL" keyword in its name at all.
+    function looksLikeAdviceSheet(sheet) {
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
+      for (let i = 0; i < Math.min(rows.length, 60); i++) {
+        const vals = (rows[i] || []).map(v => String(v || '').trim().toUpperCase());
+        if (vals.includes('SLNO') && vals.includes('EMP_CODE')) return true;
+      }
+      return false;
     }
-    if (!salSheet && !otSheet) {
-      salSheet = wb.Sheets[wb.SheetNames[0]];
-      otSheet  = wb.Sheets[wb.SheetNames[1]] || salSheet;
+    const candidateSheetNames = wb.SheetNames.filter(sname => looksLikeAdviceSheet(wb.Sheets[sname]));
+    if (candidateSheetNames.length === 0) {
+      throw new Error('No recognizable advice data found in this workbook (expected SLNO/EMP_CODE columns).');
     }
-    salSheet = salSheet || otSheet;
-    otSheet  = otSheet  || salSheet;
+    let salSheetName = null, otSheetName = null;
+    candidateSheetNames.forEach(sname => {
+      if (sname.toUpperCase().includes('OT') && !otSheetName) otSheetName = sname;
+    });
+    candidateSheetNames.forEach(sname => {
+      if (sname !== otSheetName && !salSheetName) salSheetName = sname;
+    });
+    // If only one candidate sheet exists total, use it for Salary only — do not silently
+    // duplicate a single sheet into both roles.
+    let salSheet = salSheetName ? wb.Sheets[salSheetName] : null;
+    let otSheet = otSheetName ? wb.Sheets[otSheetName] : null;
 
-    const toRows = sheet => XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
+    const toRows = sheet => sheet ? XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null }) : [];
     const salRows = toRows(salSheet);
-    const otRows  = toRows(otSheet);
+    const otRows = toRows(otSheet);
 
     setProgress(25, 'Parsing Excel sections…');
     const xlSalHdfc = parseExcelSection(salRows, 'HDFC');
     const xlSalNeft = parseExcelSection(salRows, 'OTHER');
-    const xlOtHdfc  = parseExcelSection(otRows,  'HDFC');
-    const xlOtNeft  = parseExcelSection(otRows,  'OTHER');
+    const xlOtHdfc = parseExcelSection(otRows, 'HDFC');
+    const xlOtNeft = parseExcelSection(otRows, 'OTHER');
 
     setProgress(40, 'Reading bank upload files…');
-    const hdfcFiles = [], neftFiles = [];
+    const parsedFiles = [];
     for (const f of txtFiles) {
       const text = await readFileAsText(f);
-      const type = detectFileType(text);
-      if (type === 'HDFC') hdfcFiles.push({ name: f.name, records: parseHDFC(text) });
-      else                  neftFiles.push({ name: f.name, records: parseNEFT(text) });
+      const kind = detectFileType(text); // 'HDFC' (TSAL) or 'NEFT' (TNES)
+      const records = kind === 'HDFC' ? parseHDFC(text) : parseNEFT(text);
+      parsedFiles.push({ name: f.name, kind, records, serial: extractSerial(f.name) });
     }
 
-    setProgress(60, 'Classifying files…');
-    const { hdfcSal, hdfcOt, neftSal, neftOt } = classifyFiles(
-      hdfcFiles, xlSalHdfc, xlOtHdfc, neftFiles, xlSalNeft, xlOtNeft
-    );
+    setProgress(55, 'Pairing files by serial number…');
+    const pairs = pairFilesBySerial(parsedFiles);
+    const warnings = [];
+    const sheetInfo = {
+      salName: salSheetName, otName: otSheetName,
+      salAccs: new Set([...accsOf(xlSalHdfc), ...accsOf(xlSalNeft)]),
+      otAccs: otSheetName ? new Set([...accsOf(xlOtHdfc), ...accsOf(xlOtNeft)]) : null
+    };
+
+    setProgress(65, 'Matching file pairs to Salary/OT sheets…');
+    const { salPair, otPair } = assignPairsToSheets(pairs, sheetInfo, warnings);
+    const { hdfcRecords: hdfcSal, neftRecords: neftSal } = splitPairByKind(salPair || []);
+    const { hdfcRecords: hdfcOt, neftRecords: neftOt } = splitPairByKind(otPair || []);
 
     setProgress(75, 'Comparing records…');
     allResults = {
       'disc': [],
-      'SAL-HDFC':       compareAll(xlSalHdfc, hdfcSal, 'SALARY — HDFC'),
-      'SAL-OtherBanks': compareAll(xlSalNeft, neftSal, 'SALARY — Other Banks'),
-      'OT-HDFC':        compareAll(xlOtHdfc,  hdfcOt,  'OT — HDFC'),
-      'OT-OtherBanks':  compareAll(xlOtNeft,  neftOt,  'OT — Other Banks'),
+      'SAL-HDFC': compareAll(xlSalHdfc, hdfcSal, 'SALARY — HDFC', false),
+      'SAL-OtherBanks': compareAll(xlSalNeft, neftSal, 'SALARY — Other Banks', true),
+      'OT-HDFC': compareAll(xlOtHdfc, hdfcOt, 'OT — HDFC', false),
+      'OT-OtherBanks': compareAll(xlOtNeft, neftOt, 'OT — Other Banks', true),
     };
     allResults['disc'] = Object.values(allResults).flat().filter(r => r && r.color && r.color !== 'GREEN');
 
+    if (warnings.length) showError(warnings.join(' '));
+
     setProgress(90, 'Building report…');
-    const total   = Object.entries(allResults).filter(([k]) => k !== 'disc').reduce((s,[,v]) => s + v.length, 0);
-    const matched = Object.entries(allResults).filter(([k]) => k !== 'disc').reduce((s,[,v]) => s + v.filter(r => r.color === 'GREEN').length, 0);
-    const disc    = allResults['disc'].length;
+    const total = Object.entries(allResults).filter(([k]) => k !== 'disc').reduce((s, [, v]) => s + v.length, 0);
+    const matched = Object.entries(allResults).filter(([k]) => k !== 'disc').reduce((s, [, v]) => s + v.filter(r => r.color === 'GREEN').length, 0);
+    const disc = allResults['disc'].length;
 
     document.getElementById('result-name').textContent = name;
     document.getElementById('s-total').textContent = total;
     document.getElementById('s-match').textContent = matched;
-    document.getElementById('s-disc').textContent  = disc;
+    document.getElementById('s-disc').textContent = disc;
     document.getElementById('all-clear-banner').style.display = disc === 0 ? 'flex' : 'none';
 
     buildTabs(allResults);
@@ -968,7 +1238,7 @@ async function runComparison() {
     document.getElementById('results-area').style.display = 'block';
     document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
 
-  } catch(err) {
+  } catch (err) {
     showError('Error: ' + err.message);
     console.error(err);
   }
@@ -992,10 +1262,16 @@ function buildTabs(results) {
   for (const [key, label] of Object.entries(TAB_LABELS)) {
     const rows = results[key] || [];
     const discCount = key === 'disc' ? rows.length : rows.filter(r => r.color !== 'GREEN').length;
-    const el = document.createElement('div');
+    const totalCount = rows.length;
+    const el = document.createElement('button');
+    el.type = 'button';
     el.className = 'tab' + (key === currentTab ? ' active' : '');
     el.dataset.tab = key;
-    el.innerHTML = label + (discCount > 0 ? `<span class="tab-badge">${discCount}</span>` : '');
+    // Total row count as a neutral badge on every sheet×category tab (not on "Discrepancies",
+    // which is itself a filtered count), plus the existing red discrepancy-count badge.
+    const totalBadge = key !== 'disc' ? `<span class="tab-badge" style="background:#B0BEC5;">${totalCount}</span>` : '';
+    const discBadge = discCount > 0 ? `<span class="tab-badge">${discCount}</span>` : '';
+    el.innerHTML = label + totalBadge + discBadge;
     el.onclick = () => showTab(key);
     bar.appendChild(el);
   }
@@ -1008,8 +1284,8 @@ function showTab(key) {
   renderTable(rows);
 }
 
-const COLOR_CLS = { GREEN:'row-green', RED:'row-red', ORANGE:'row-orange', YELLOW:'row-yellow', PURPLE:'row-purple', BLUE:'row-blue' };
-const BADGE_CLS = { GREEN:'badge-green', RED:'badge-red', ORANGE:'badge-orange', YELLOW:'badge-yellow', PURPLE:'badge-purple', BLUE:'badge-blue' };
+const COLOR_CLS = { GREEN: 'row-green', RED: 'row-red', ORANGE: 'row-orange', YELLOW: 'row-yellow', PURPLE: 'row-purple', BLUE: 'row-blue' };
+const BADGE_CLS = { GREEN: 'badge-green', RED: 'badge-red', ORANGE: 'badge-orange', YELLOW: 'badge-yellow', PURPLE: 'badge-purple', BLUE: 'badge-blue' };
 
 function renderTable(rows) {
   const thead = document.getElementById('results-thead');
@@ -1027,50 +1303,48 @@ function renderTable(rows) {
 
   tbody.innerHTML = rows.map((r, i) => `
     <tr class="${COLOR_CLS[r.color] || ''}">
-      <td>${i+1}</td>
-      <td><code style="font-size:11px">${r.account}</code></td>
+      <td>${i + 1}</td>
+      <td class="mono">${r.account}</td>
       <td><span class="badge ${BADGE_CLS[r.color]}">${r.color}</span> ${r.color === 'GREEN' ? '' : escHtml(r.status)}</td>
       <td>${escHtml(r.excel_name)}</td>
       <td>${r.excel_amt}</td>
-      <td style="font-size:11px">${r.excel_ifsc}</td>
+      <td class="mono">${r.excel_ifsc}</td>
       <td>${escHtml(r.txt_name)}</td>
       <td>${r.txt_amt}</td>
-      <td style="font-size:11px">${r.txt_ifsc}</td>
+      <td class="mono">${r.txt_ifsc ? escHtml(r.txt_ifsc) : (r.txt_name === '—' ? '—' : 'N/A')}</td>
     </tr>`).join('');
 }
 
-function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
 // ── Excel download ────────────────────────────────────────────────────────
 function downloadReport() {
   const name = document.getElementById('payroll-name').value.trim() || 'Payroll';
-  const COLS = ['#','Account No.','Status','Excel Name','Excel Amount','Excel IFSC','Bank Name','Bank Amount','Bank IFSC'];
+  const COLS = ['#', 'Account No.', 'Status', 'Excel Name', 'Excel Amount', 'Excel IFSC', 'Bank Name', 'Bank Amount', 'Bank IFSC'];
   const WIDTHS = [5, 22, 55, 28, 14, 16, 28, 14, 16];
   const COL_FILLS = {
-    GREEN:'D5F5E3', RED:'FDEAEA', ORANGE:'FFF3E0',
-    YELLOW:'FFFDE7', PURPLE:'F5EEF8', BLUE:'EBF5FB'
+    GREEN: 'D5F5E3', RED: 'FDEAEA', ORANGE: 'FFF3E0',
+    YELLOW: 'FFFDE7', PURPLE: 'F5EEF8', BLUE: 'EBF5FB'
   };
 
   const newWb = XLSX.utils.book_new();
 
   function makeSheet(rows, title) {
-    const data = [[title],[],
-      [`Total: ${rows.length}    Matched: ${rows.filter(r=>r.color==='GREEN').length}    Discrepancies: ${rows.filter(r=>r.color!=='GREEN').length}`],
+    const data = [[title], [],
+      [`Total: ${rows.length}    Matched: ${rows.filter(r => r.color === 'GREEN').length}    Discrepancies: ${rows.filter(r => r.color !== 'GREEN').length}`],
       [],
       COLS,
-      ...rows.map((r,i) => [i+1, r.account, r.status, r.excel_name, r.excel_amt, r.excel_ifsc, r.txt_name, r.txt_amt, r.txt_ifsc])
+      ...rows.map((r, i) => [i + 1, r.account, r.status, r.excel_name, r.excel_amt, r.excel_ifsc, r.txt_name, r.txt_amt, r.txt_ifsc])
     ];
     const ws = XLSX.utils.aoa_to_sheet(data);
     ws['!cols'] = WIDTHS.map(w => ({ wch: w }));
 
-    // Style header row (row 5 = index 4)
     COLS.forEach((_, ci) => {
       const cellRef = XLSX.utils.encode_cell({ r: 4, c: ci });
       if (!ws[cellRef]) ws[cellRef] = { v: COLS[ci], t: 's' };
       ws[cellRef].s = { fill: { fgColor: { rgb: '1F497D' } }, font: { color: { rgb: 'FFFFFF' }, bold: true } };
     });
 
-    // Style data rows
     rows.forEach((row, ri) => {
       const fill = COL_FILLS[row.color] || 'FFFFFF';
       COLS.forEach((_, ci) => {
@@ -1083,10 +1357,10 @@ function downloadReport() {
   }
 
   const sections = [
-    ['disc',          'Discrepancies Only'],
-    ['SAL-HDFC',      'SAL-HDFC'],
-    ['SAL-OtherBanks','SAL-OtherBanks'],
-    ['OT-HDFC',       'OT-HDFC'],
+    ['disc', 'Discrepancies Only'],
+    ['SAL-HDFC', 'SAL-HDFC'],
+    ['SAL-OtherBanks', 'SAL-OtherBanks'],
+    ['OT-HDFC', 'OT-HDFC'],
     ['OT-OtherBanks', 'OT-OtherBanks'],
   ];
 
@@ -1099,5 +1373,6 @@ function downloadReport() {
   saveAs(new Blob([buf], { type: 'application/octet-stream' }), `${name}_Comparison_Report.xlsx`);
 }
 </script>
+
 </body>
 </html>
